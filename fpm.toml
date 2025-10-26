@@ -20,6 +20,12 @@ fortplot = { git = "https://github.com/krystophny/fortplot" }
 [dev-dependencies]
 # stdlib = {path = "../../stdlib"}
 
+[extra.ford]
+project = "fumat"
+summary = "Modern Fortran library to plot and analyze the results from incremental-driver"
+src_dir = ["src", "example"]
+output_dir = "build/doc"
+
 [install]
 library = false
 test = false
