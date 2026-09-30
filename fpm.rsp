@@ -1,2 +1,0 @@
-@local_build
-fpm build --config-file ./fpm_local.toml

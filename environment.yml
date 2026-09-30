@@ -1,39 +1,30 @@
-name: csm
+# Shared with critical-soil-models: same env name (fpm), so one env builds every
+# CriticalSoilModels repository. gfortran only (element-driver D13); LFortran is not
+# supported by fumat.
+name: fpm
 channels:
   - conda-forge
   - defaults
 dependencies:
-  # Fortran compilers
+  # Fortran compiler
   - gfortran
-  # - ifx_linux-64
-  # - ifx_win-64
-  # - intel-fortran-rt
-  # - flang
-  - lfortran
+  - gcc
 
   # Build tools
   - fpm
-  # - cmake
-  # - ninja
-  # - meson
 
-  # Visualization
-  # - pyvista
-  # - paraview
-  # - gmsh
-  # - freecad
+  # Notes (notes/*.typ) and the Claude Code hook that compiles them
+  - typst
+  - jq
 
   # Formatting and linting
   - fortls
-  # - fprettify
-  # - findent
-
-  # Documentation
-  # - ford
-  # - graphviz
 
   # Version control
   - git
   - pip
   - pip:
     - git+https://github.com/Fortran-FOSS-Programmers/ford.git
+
+variables:
+  FPM_FC: gfortran

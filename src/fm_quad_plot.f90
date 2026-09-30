@@ -20,10 +20,7 @@
 ! compression_positive = .true. to plot p, eps_v, and eps_a in the geotechnical convention;
 ! only the drawn values change.
 !
-! Legend: fortplot's figure legend is broken for subplots (entries drawn on top of each
-! other in the lower-left corner, location ignored; fumat notes Q7). Until it is fixed, each
-! test gets a fixed colour from the matplotlib tab10 cycle and the colour key is written
-! above the top-left panel, e.g. "blue: p0 = 50 kPa   orange: p0 = 100 kPa".
+! Legend: a colour key above the top-left panel instead of a legend (mod_fm_plot_style, Q7).
 !
 ! Usage:
 !    type(quad_plot_t) :: fig
@@ -34,6 +31,7 @@ module mod_fm_quad_plot
    use mod_fm_kinds,            only: wp
    use mod_invariant_histories, only: calc_p_history, calc_q_history, calc_eps_vol_history, &
                                       calc_eps_q_history
+   use mod_fm_plot_style,       only: series_colour, add_to_key, plot_scales, check_history, label_panel
    use fortplot,                only: figure_t
    use stdlib_error,            only: state_type, STDLIB_VALUE_ERROR, STDLIB_SUCCESS
    implicit none
@@ -41,15 +39,6 @@ module mod_fm_quad_plot
    public :: quad_plot_t
 
    character(len=*), parameter :: WHERE_AT = "quad_plot_t"
-
-   ! matplotlib tab10 colour cycle, with names for the colour key.
-   character(len=*), parameter :: COLOUR_NAMES(10) = [character(len=6) :: "blue", "orange", "green", &
-      "red", "purple", "brown", "pink", "grey", "olive", "cyan"]
-   real(wp), parameter :: COLOURS(3, 10) = reshape([ &
-      31.0_wp, 119.0_wp, 180.0_wp,   255.0_wp, 127.0_wp,  14.0_wp,    44.0_wp, 160.0_wp,  44.0_wp, &
-     214.0_wp,  39.0_wp,  40.0_wp,   148.0_wp, 103.0_wp, 189.0_wp,   140.0_wp,  86.0_wp,  75.0_wp, &
-     227.0_wp, 119.0_wp, 194.0_wp,   127.0_wp, 127.0_wp, 127.0_wp,   188.0_wp, 189.0_wp,  34.0_wp, &
-      23.0_wp, 190.0_wp, 207.0_wp], [3, 10]) / 255.0_wp
 
    type :: quad_series_t
       character(len=:), allocatable :: label
@@ -81,19 +70,11 @@ contains
       real(wp),           intent(in)    :: eps(:,:)   !! (6, n) strain history
       character(len=*),   intent(in), optional :: label
       type(quad_series_t) :: s
-      character(len=16) :: number
 
       if (allocated(self%add_error)) return
       if (.not. allocated(self%series)) allocate(self%series(0))
-      write(number, '(i0)') size(self%series) + 1
-      if (size(sig, 1) /= 6 .or. size(eps, 1) /= 6) then
-         self%add_error = "test "//trim(number)//": sig and eps must have 6 rows"
-         return
-      end if
-      if (size(sig, 2) /= size(eps, 2)) then
-         self%add_error = "test "//trim(number)//": sig and eps have different numbers of states"
-         return
-      end if
+      call check_history(sig, eps, size(self%series) + 1, self%add_error)
+      if (allocated(self%add_error)) return
 
       s%label = ""
       if (present(label)) s%label = label
@@ -114,7 +95,6 @@ contains
       real(wp) :: sign, strain_scale
       real(wp), allocatable :: x_shear(:)
       character(len=:), allocatable :: unit, strain_unit, shear_label, eps_v_label, p_label, q_label, key
-      real(wp) :: colour(3)
       integer :: i
 
       if (allocated(self%add_error)) then
@@ -130,14 +110,7 @@ contains
          return
       end if
 
-      sign = 1.0_wp
-      if (self%compression_positive) sign = -1.0_wp
-      strain_scale = 1.0_wp
-      strain_unit  = "[-]"
-      if (self%strain_in_percent) then
-         strain_scale = 100.0_wp
-         strain_unit  = "[%]"
-      end if
+      call plot_scales(self%compression_positive, self%strain_in_percent, sign, strain_scale, strain_unit)
       unit = "kPa"
       if (allocated(self%stress_unit)) unit = self%stress_unit
 
@@ -155,21 +128,17 @@ contains
       key = ""
       do i = 1, size(self%series)
          associate (s => self%series(i))
-            colour = COLOURS(:, modulo(i - 1, size(COLOURS, 2)) + 1)
-            if (len(s%label) > 0) then
-               if (len(key) > 0) key = key//"   "
-               key = key//trim(COLOUR_NAMES(modulo(i - 1, size(COLOURS, 2)) + 1))//": "//s%label
-            end if
+            call add_to_key(key, i, s%label)
             ! q and eps_q are magnitudes: never flipped.
             if (self%use_axial_strain) then
                x_shear = sign*strain_scale*s%eps_a
             else
                x_shear = strain_scale*s%eps_q
             end if
-            call fig%subplot_plot(1, 1, x_shear,  s%q,                      color=colour)
-            call fig%subplot_plot(1, 2, sign*s%p, s%q,                      color=colour)
-            call fig%subplot_plot(2, 1, x_shear,  sign*strain_scale*s%eps_v, color=colour)
-            call fig%subplot_plot(2, 2, sign*s%p, sign*strain_scale*s%eps_v, color=colour)
+            call fig%subplot_plot(1, 1, x_shear,  s%q,                      color=series_colour(i))
+            call fig%subplot_plot(1, 2, sign*s%p, s%q,                      color=series_colour(i))
+            call fig%subplot_plot(2, 1, x_shear,  sign*strain_scale*s%eps_v, color=series_colour(i))
+            call fig%subplot_plot(2, 2, sign*s%p, sign*strain_scale*s%eps_v, color=series_colour(i))
          end associate
       end do
 
@@ -184,14 +153,5 @@ contains
       call fig%savefig(filename)
       status = state_type(STDLIB_SUCCESS)
    end subroutine quad_plot_save
-
-   subroutine label_panel(fig, row, col, xlabel, ylabel)
-      type(figure_t),   intent(inout) :: fig
-      integer,          intent(in)    :: row, col
-      character(len=*), intent(in)    :: xlabel, ylabel
-
-      call fig%subplot_set_xlabel(row, col, xlabel)
-      call fig%subplot_set_ylabel(row, col, ylabel)
-   end subroutine label_panel
 
 end module mod_fm_quad_plot

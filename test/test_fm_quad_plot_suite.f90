@@ -1,6 +1,7 @@
 module mod_test_fm_quad_plot_suite
    use mod_fm_kinds,     only: wp
    use mod_fm_quad_plot, only: quad_plot_t
+   use mod_fm_test_files, only: delete_if_exists, check_written
    use stdlib_error,     only: state_type
    use testdrive,        only: new_unittest, unittest_type, error_type, check
    implicit none
@@ -101,29 +102,13 @@ contains
    end subroutine test_options
 
    subroutine check_png(fig, error)
-      !! Saves to PNG and checks that a non-empty file appeared; removes it afterwards.
       type(quad_plot_t), intent(in) :: fig
       type(error_type), allocatable, intent(out) :: error
       type(state_type) :: status
-      logical :: exists
-      integer :: file_size, unit
 
-      inquire(file=PNG, exist=exists)
-      if (exists) call delete(PNG)
+      call delete_if_exists(PNG)
       call fig%save(PNG, status)
-      call check(error, .not. status%error(), more="save failed: "//trim(status%message))
-      if (allocated(error)) return
-      inquire(file=PNG, exist=exists, size=file_size)
-      call check(error, exists .and. file_size > 0, more="no PNG written")
-      if (exists) call delete(PNG)
+      call check_written(PNG, status, error)
    end subroutine check_png
-
-   subroutine delete(path)
-      character(len=*), intent(in) :: path
-      integer :: unit
-
-      open(newunit=unit, file=path, status="old")
-      close(unit, status="delete")
-   end subroutine delete
 
 end module mod_test_fm_quad_plot_suite

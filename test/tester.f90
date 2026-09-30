@@ -5,7 +5,9 @@ program tester
    use testdrive, only: run_testsuite, new_testsuite, testsuite_type, &
       select_suite, run_selected, get_argument, init_color_output
 
-   use mod_test_fm_quad_plot_suite, only: collect_quad_plot_suite
+   use mod_test_fm_quad_plot_suite,      only: collect_quad_plot_suite
+   use mod_test_fm_oedometer_plot_suite, only: collect_oedometer_plot_suite
+   use mod_test_fm_xy_plot_suite,        only: collect_xy_plot_suite
    implicit none
    integer :: stat, is
    character(len=:), allocatable :: suite_name, test_name
@@ -15,7 +17,9 @@ program tester
    stat = 0
 
    testsuites = [ &
-      new_testsuite("test_quad_plot", collect_quad_plot_suite) &
+      new_testsuite("test_quad_plot",      collect_quad_plot_suite), &
+      new_testsuite("test_oedometer_plot", collect_oedometer_plot_suite), &
+      new_testsuite("test_xy_plot",        collect_xy_plot_suite) &
       ]
 
    call init_color_output(.true.)

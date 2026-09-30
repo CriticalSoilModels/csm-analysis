@@ -64,10 +64,12 @@ Discussed 2026-09-30.
     rows are work conjugate with it. Now one definition, in `csm-tensors`.], [#resolved],
   [F6], [Same library style as `element-driver` (D4, D11): no global state, no `stop` in library code,
     errors returned as a `stdlib_error: state_type`. Plotting and file writing are the only side
-    effects, and only in the routines named for them.], [#proposed],
+    effects, and only in the routines named for them. In effect in all the figures (2026-09-30).],
+    [#resolved],
   [F7], [Toolchain aligned with `element-driver`: gfortran only (D13), `stdlib` at `../../stdlib`,
     `fortplot` from `lazy-fortran/fortplot`, `test-drive` for tests, and notes in Typst with the
-    compile hook.], [#proposed],
+    compile hook. In effect: `fpm.toml`, `environment.yml` (env `fpm`, shared with
+    `critical-soil-models`; typst and jq for the notes hook).], [#resolved],
   [F8], [`fumat` is a *regular* dependency of `element-driver` (was Q1). Its examples plot with `fumat`.
     Downstream programs also build `fortplot`, which is small and builds easily.], [#resolved],
   [F9], [`element-driver` is the first data source, handed over in memory. Text files (CSV output, legacy
@@ -220,8 +222,13 @@ call fig%save("output/triaxial_mcss.png", status)
   table.header([*Module*], [*Contents*]),
   [`mod_fm_quad_plot`], [#resolved The triaxial quad plot (@sec-quad).],
   [`mod_fm_kinds`], [#resolved `wp` from `csm-tensors`.],
-  [more plots], [Oedometer ($sigma_v$--$epsilon_a$, $sigma_h$--$sigma_v$), a general $x$--$y$ overlay, following
-    the pattern of `quad_plot_t`.],
+  [`mod_fm_oedometer_plot`], [#resolved `oedometer_plot_t`: $sigma_v$ vs $epsilon_a$ and $sigma_h$ vs $sigma_v$ side by
+    side, axis 1 vertical, $sigma_h = (sigma_22 + sigma_33)\/2$. All signed, so `compression_positive`
+    flips everything. $e$--$log sigma'_v$ needs a void ratio and a log axis; not done.],
+  [`mod_fm_xy_plot`], [#resolved `xy_plot_t`: any curves on one set of axes; the caller computes and
+    scales $x$ and $y$. On a single set of axes `fortplot`'s legend works, so it is used.],
+  [`mod_fm_plot_style`], [#resolved Shared by the figures: tab10 colour cycle, colour key, sign and
+    strain scaling, shape check, panel labels.],
   [`mod_fm_compare`], [#deferred Model--data comparison: interpolate the model onto the measured
     abscissa (e.g. axial strain), residual vectors, weights, and normalization per quantity.],
   [`mod_fm_record`, `mod_fm_csv`, `mod_fm_lab`], [#deferred With the text files (F9).],
@@ -297,10 +304,12 @@ Because `element-driver` has no global state (D11), parameter sets can run in pa
   table.header([*\#*], [*Scope*]),
   [0], [#resolved *`csm-tensors`* (F10). Repository created, code moved from `critical-soil-models`
     and `element-driver`, history versions added, both repositories switched, all tests passing.],
-  [1], [*Clean-up.* Done: `.gitignore`, `fumat.mod` removed, `fpm.toml` aligned (F7), `test-drive` set up,
-    `app/main.f90` moved to `example/fortplot_basics.f90`. To do: README and environment file.],
-  [2], [*Plots.* Quad plot done (@sec-quad); `element-driver` depends on `fumat` (F8) and its two
-    triaxial examples use it. Oedometer plot to do.],
+  [1], [#resolved *Clean-up.* `.gitignore`, `fumat.mod` and the stale `fpm.rsp` removed, `fpm.toml`
+    aligned (F7), `test-drive` set up, `app/main.f90` moved to `example/fortplot_basics.f90`, README
+    and `environment.yml` rewritten.],
+  [2], [#resolved *Plots.* Quad plot (@sec-quad), oedometer plot, $x$--$y$ overlay; 11 tests.
+    `element-driver` depends on `fumat` (F8), all three of its examples plot with it, and it no longer
+    uses `fortplot` directly. Still open: report the legend bug upstream (Q7).],
   [3], [*Comparison.* `mod_fm_compare`: interpolation and residuals, tested with one
     `element-driver` run as synthetic "data". Then decide Q6 and the `simulator_t` interface.],
   [--], [*Deferred.* Text files: CSV, legacy output, lab data, `record_t` readers (F9).],
@@ -318,3 +327,5 @@ Because `element-driver` has no global state (D11), parameter sets can run in pa
   Milestone 1 mostly done, milestone 2 started. `element-driver` now depends on `fumat`.
 - 2026-09-30: The quad plot uses the invariant pair $q = sqrt(3 J_2)$, $epsilon_q$ instead of the signed
   triaxial pair (F12, Q8).
+- 2026-09-30: Milestones 1 and 2 done: `oedometer_plot_t`, `xy_plot_t`, shared `mod_fm_plot_style`;
+  README and `environment.yml`; F6, F7 in effect. 11 tests pass.
