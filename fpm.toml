@@ -11,23 +11,22 @@ auto-examples = true
 module-naming = false
 
 [dependencies]
-
-# stdlib = { git="https://github.com/fortran-lang/stdlib", branch="stdlib-fpm" }
-# stdlib = {path = "../../stdlib"}
-stdlib = "*"
-fortplot = { git = "https://github.com/krystophny/fortplot" }
+stdlib = {path = "../../stdlib"}
+# Invariants and the wp kind, shared with critical-soil-models and element-driver (F10)
+csm-tensors = { path = "../csm-tensors" }
+fortplot = { git = "https://github.com/lazy-fortran/fortplot" }
 
 [dev-dependencies]
-# stdlib = {path = "../../stdlib"}
+test-drive = { git = "https://github.com/fortran-lang/test-drive.git/" }
 
 [extra.ford]
 project = "fumat"
-summary = "Modern Fortran library to plot and analyze the results from incremental-driver"
+summary = "Modern Fortran library to plot and analyze the results of constitutive-model element tests"
 src_dir = ["src", "example"]
 output_dir = "build/doc"
 
 [install]
-library = false
+library = true
 test = false
 
 [fortran]

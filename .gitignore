@@ -1,0 +1,11 @@
+# fpm build output
+build/
+
+# Fortran module files
+*.mod
+
+# Plots written by the examples
+output/
+
+# Local Claude Code settings and hooks
+.claude/
