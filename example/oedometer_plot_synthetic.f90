@@ -8,7 +8,7 @@
 ! Writes:   output/oedometer_plot_synthetic.png, output/oedometer_k0_synthetic.png
 
 program oedometer_plot_synthetic
-   use fumat,        only: wp, oedometer_plot_t, xy_plot_t
+   use csm_analysis,        only: wp, oedometer_plot_t, xy_plot_t
    use stdlib_error, only: state_type
    use stdlib_math,  only: linspace
    implicit none

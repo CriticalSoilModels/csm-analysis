@@ -1,11 +1,11 @@
-# fumat
+# csm-analysis (formerly fumat)
 
-Modern Fortran library to plot and analyze constitutive-model element-test results. Build and
+Modern Fortran library to plot and analyze constitutive-model results (element tests, FEM, MPM): plots, data comparison, and later sensitivity studies and calibration. Build and
 test with `fpm build` / `fpm test` in the conda env `fpm` (see README.md).
 
 ## Keep the developer notes up to date
 
-`notes/fumat.pdf` (sources `notes/fumat.typ`, chapters `notes/architecture.typ`,
+`notes/csm_analysis.pdf` (sources `notes/csm_analysis.typ`, chapters `notes/architecture.typ`,
 `notes/next_steps.typ`) is the project's record of decisions and their context. Keep it current as
 we go, without being asked:
 
@@ -21,11 +21,11 @@ we go, without being asked:
   `#proposed`, `#open-tag`, `#deferred`, `#debt`). Proposals are not decisions until the user agrees.
 - Mark anything not verified (links, library features, versions) as not checked.
 - Add a dated line to the change log at the end of `architecture.typ`.
-- A new chapter goes in its own `.typ` file, included from `fumat.typ` with a `<ch-...>` label and
+- A new chapter goes in its own `.typ` file, included from `csm_analysis.typ` with a `<ch-...>` label and
   listed in its introduction.
 
 The `.claude/hooks/typst-compile.sh` hook recompiles the PDF after each edit to a `.typ` file. By
-hand: `typst compile --root . notes/fumat.typ`. Fix compile errors before finishing.
+hand: `typst compile --root . notes/csm_analysis.typ`. Fix compile errors before finishing.
 
 ## Scope
 

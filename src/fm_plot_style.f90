@@ -1,8 +1,8 @@
-! Shared pieces of the fumat figures: the colour cycle, the colour key, and the scaling of
+! Shared pieces of the csm-analysis figures: the colour cycle, the colour key, and the scaling of
 ! plotted values (sign flip for compression_positive, strains in %).
 !
 ! Colour key: fortplot's figure legend is broken for subplots (entries drawn on top of each
-! other in the lower-left corner, location ignored; fumat notes Q7). Until it is fixed, each
+! other in the lower-left corner, location ignored; csm-analysis notes Q7). Until it is fixed, each
 ! series gets a fixed colour from the matplotlib tab10 cycle, and the figures write a key such
 ! as "blue: 50 kPa   orange: 100 kPa" as the title of their first panel.
 

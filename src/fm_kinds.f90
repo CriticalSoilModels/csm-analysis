@@ -1,6 +1,6 @@
-! Working precision kinds for fumat.
+! Working precision kinds for csm-analysis.
 !
-! wp is the working precision of csm-tensors (mod_csm_kinds), so fumat, element-driver, and
+! wp is the working precision of csm-tensors (mod_csm_kinds), so csm-analysis, element-driver, and
 ! critical-soil-models always agree. Change it there, not here.
 
 module mod_fm_kinds

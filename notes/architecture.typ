@@ -20,16 +20,20 @@ it knows which solver produced the data. A material-point history from an FEM or
   [`csm-tensors`], [Voigt conventions, stress and strain invariants and their derivatives, stress
     spaces, elastic conversions, the `wp` kind. Pure functions, no state (@sec-invariants).], [`stdlib`],
   [`critical-soil-models`], [Soil constitutive models, solver independent.], [`stdlib`, `csm-tensors`],
-  [`fumat`], [Post-processing, plotting, model--data comparison. Solver independent (F1).],
-    [`stdlib`, `fortplot`, `csm-tensors`],
-  [`element-driver`], [Single-element solver. A library with no files or printing (D4).],
-    [`critical-soil-models`, `fumat` (F8), `stdlib`, `csm-tensors`],
+  [`csm-analysis` (was `fumat`)], [Post-processing, plotting, model--data comparison; later sensitivity
+    studies and calibration (F13). The library is solver independent (F1).],
+    [`stdlib`, `fortplot`, `csm-tensors`; dev: `element-driver` (examples)],
+  [`element-driver`], [Single-element solver. A library with no files or printing (D4). Its examples
+    plot with a small quad plotter of their own.],
+    [`critical-soil-models`, `stdlib`, `csm-tensors`; dev: `fortplot`],
   [`Incremental_Driver`], [Frozen legacy driver.], [--],
 )
 
-The dependency arrows point one way. `csm-tensors` is the common leaf. `critical-soil-models`
-and `fumat` sit beside each other and do not know about each other, and `element-driver` sits on top.
-`fumat` never imports a solver or a model. It learns about results only through arrays (F2).
+The dependency arrows point one way. `csm-tensors` is the common leaf. The `csm-analysis` *library*
+never imports a solver or a model; it learns about results only through arrays (F2). Since F13,
+`element-driver` no longer depends on `csm-analysis`; `csm-analysis` uses `element-driver` as a
+dev-dependency, so its examples can run element tests. fpm does not pass dev-dependencies on, so
+there is no cycle.
 
 #callout("Change from the earlier plan", orange)[
   `Notes/architecture_decisions.md` (parent folder) had `fumat` on top of the driver and calling it in
@@ -70,8 +74,8 @@ Discussed 2026-09-30.
     `fortplot` from `lazy-fortran/fortplot`, `test-drive` for tests, and notes in Typst with the
     compile hook. In effect: `fpm.toml`, `environment.yml` (env `fpm`, shared with
     `critical-soil-models`; typst and jq for the notes hook).], [#resolved],
-  [F8], [`fumat` is a *regular* dependency of `element-driver` (was Q1). Its examples plot with `fumat`.
-    Downstream programs also build `fortplot`, which is small and builds easily.], [#resolved],
+  [F8], [*Superseded by F13 (2026-09-30).* Was: `fumat` is a regular dependency of `element-driver`, whose
+    examples plot with `fumat`.], [#resolved],
   [F9], [`element-driver` is the first data source, handed over in memory. Text files (CSV output, legacy
     `Incremental_Driver` files, lab data) are left for later (was Q4, Q5).], [#resolved],
   [F10], [Invariants and Voigt helpers are implemented once, in `csm-tensors`, which
@@ -86,6 +90,14 @@ Discussed 2026-09-30.
     path). $epsilon_q$ is the default strain axis; axial strain is an option for lab data
     ($epsilon_a = epsilon_q + epsilon_v\/3$ in triaxial compression, taken compression positive; equal
     only without volume change).], [#resolved],
+  [F13], [*Renamed `fumat` to `csm-analysis` (2026-09-30)*, and widened its scope: plotting, data analysis,
+    parameter sensitivity studies, and calibration all live here, instead of a separate calibration
+    repository; it stays usable for FEM, MPM, and element-driver data. The library remains solver
+    independent (F1). The dependency direction is reversed from F8: `element-driver` no longer depends
+    on `csm-analysis` (its examples have their own small quad plotter), and `csm-analysis` takes
+    `element-driver` as a dev-dependency for its examples (`example/triaxial_mcss.f90`). Package and
+    top-level module renamed (`csm-analysis`, `use csm_analysis`); the internal `fm_` module prefix is
+    kept for now. Not done: renaming the GitHub repository (`CriticalSoilModels/fumat`).], [#resolved],
 )
 
 = `csm-tensors` <sec-invariants>
@@ -343,3 +355,6 @@ The kind of optimization problem and the candidate optimizers are discussed in @
 - 2026-09-30: Next steps discussed (@ch-next): candidate data sets, lab data to Voigt arrays, CSV
   plus metadata sidecar, reader and analysis libraries, the calibration problem, a proposed order.
   Q4 and Q5 updated; Q9--Q12 added. Nothing decided.
+- 2026-09-30: Renamed to `csm-analysis` (F13; F8 superseded). `element-driver` dropped its dependency;
+  `element-driver` is a dev-dependency here, with `example/triaxial_mcss.f90` (MCSS drained triaxial at
+  three cell pressures, run by element-driver, plotted with `quad_plot_t`). 11 tests pass.

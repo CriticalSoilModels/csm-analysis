@@ -1,6 +1,6 @@
 # Shared with critical-soil-models: same env name (fpm), so one env builds every
 # CriticalSoilModels repository. gfortran only (element-driver D13); LFortran is not
-# supported by fumat.
+# supported by csm-analysis.
 name: fpm
 channels:
   - conda-forge

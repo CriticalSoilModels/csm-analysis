@@ -1,5 +1,5 @@
-# fumat (Fortran Umat)
-Is a modern fortran library for analyzing, plotting, and general data processing of results from constitutive model element tests. With the modern fortran ecosystem it's possible to do all of the analysis that would normally be done in python in fortran. 
+# csm-analysis
+(Formerly *fumat*, renamed 2026-09-30.) A modern Fortran library for analyzing, plotting, and general data processing of results from constitutive models: element tests, FEM, MPM. It is also the home for parameter sensitivity studies and calibration as they are added. With the modern fortran ecosystem it's possible to do all of the analysis that would normally be done in python in fortran. 
 
 There are a couple of benefits to doing the data processing in fortran rather than python.
 1) Fortran is really fast. We can do a lot of testing and plotting quickly.
@@ -10,14 +10,14 @@ There are a couple of benefits to doing the data processing in fortran rather th
 
 ## What it does
 
-fumat takes stress and strain histories, `sig(6, n)` and `eps(6, n)` in Voigt order
+csm-analysis takes stress and strain histories, `sig(6, n)` and `eps(6, n)` in Voigt order
 `[11, 22, 33, 12, 13, 23]` with engineering shear strain and tension positive, from any
-solver, and plots and analyzes them. It does not depend on any solver or constitutive model;
-[element-driver](https://github.com/CriticalSoilModels/element-driver) depends on fumat for
-its plots. Invariants come from [csm-tensors](https://github.com/CriticalSoilModels/csm-tensors).
+solver, and plots and analyzes them. The library does not depend on any solver or constitutive
+model. [element-driver](https://github.com/CriticalSoilModels/element-driver) is a
+*dev-dependency*, used only by the examples (e.g. `example/triaxial_mcss.f90`). Invariants come from [csm-tensors](https://github.com/CriticalSoilModels/csm-tensors).
 
 ```fortran
-use fumat, only: quad_plot_t
+use csm_analysis, only: quad_plot_t
 type(quad_plot_t) :: fig
 call fig%add(history%sig, history%eps, label="100 kPa")
 fig%compression_positive = .true.      ! default: plot as stored (compression negative)
@@ -30,12 +30,12 @@ Figures:
 - `oedometer_plot_t`: vertical stress vs axial strain, and horizontal vs vertical stress.
 - `xy_plot_t`: any x-y curves on one set of axes (Lode angle, state variables, K0, ...).
 
-Design decisions, open questions, and the change log are in `notes/fumat.pdf`
-(source `notes/fumat.typ`).
+Design decisions, open questions, and the change log are in `notes/csm_analysis.pdf`
+(source `notes/csm_analysis.typ`).
 
 ## Building
 
-fumat is built with the [Fortran Package Manager (fpm)](https://github.com/fortran-lang/fpm)
+csm-analysis is built with the [Fortran Package Manager (fpm)](https://github.com/fortran-lang/fpm)
 and gfortran. Install conda ([Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install)),
 then create the environment shared with critical-soil-models:
 
@@ -52,7 +52,7 @@ fpm build                                   # debug build
 fpm test                                    # run the tests
 fpm run --example quad_plot_synthetic       # writes output/quad_plot_synthetic*.png
 fpm run --example oedometer_plot_synthetic  # writes output/oedometer_*synthetic.png
-typst compile --root . notes/fumat.typ      # the developer notes
+typst compile --root . notes/csm_analysis.typ      # the developer notes
 ford fpm.toml                               # API documentation (not published yet)
 ```
 

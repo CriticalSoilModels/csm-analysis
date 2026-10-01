@@ -1,12 +1,12 @@
 #import "template.typ": *
 #import "tags.typ": *
 #show: note.with(
-  title: "fumat",
+  title: "csm-analysis (formerly fumat)",
   subtitle: [Architecture, decisions, and change log · started 2026-09-30],
 )
 
-This is the single developer document for `fumat`. Compile it from the repository root with
-`typst compile --root . notes/fumat.typ`; the chapters live in `notes/architecture.typ` and are not
+This is the single developer document for `csm-analysis` (named `fumat` until 2026-09-30). Compile it from the repository root with
+`typst compile --root . notes/csm_analysis.typ`; the chapters live in `notes/architecture.typ` and are not
 compiled on their own. The layout follows `element-driver/notes`, and `template.typ` is a copy of
 the one there.
 
@@ -27,7 +27,7 @@ Decisions of `element-driver` are cited as D1, D2, ... (see `element-driver/note
 #outline(depth: 2, indent: auto)
 
 #pagebreak()
-= Architecture of `fumat` <ch-arch>
+= Architecture of `csm-analysis` <ch-arch>
 #[
   #set heading(offset: 1)
   #include "architecture.typ"

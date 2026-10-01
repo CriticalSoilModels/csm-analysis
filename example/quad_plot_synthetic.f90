@@ -8,7 +8,7 @@
 ! Writes:   output/quad_plot_synthetic.png, output/quad_plot_synthetic_compression_positive.png
 
 program quad_plot_synthetic
-   use fumat,        only: wp, quad_plot_t
+   use csm_analysis,        only: wp, quad_plot_t
    use stdlib_error, only: state_type
    use stdlib_math,  only: linspace
    implicit none

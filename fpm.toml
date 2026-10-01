@@ -1,4 +1,4 @@
-name = "fumat"
+name = "csm-analysis"
 version = "0.1.0"
 license = "license"
 author = "WaveHello"
@@ -17,11 +17,14 @@ csm-tensors = { path = "../csm-tensors" }
 fortplot = { git = "https://github.com/lazy-fortran/fortplot" }
 
 [dev-dependencies]
+# Examples only: run element tests to plot (example/triaxial_mcss.f90). The library itself stays
+# solver independent (F1); element-driver does not depend on csm-analysis (F8 superseded, F13).
+element-driver = { path = "../element-driver" }
 test-drive = { git = "https://github.com/fortran-lang/test-drive.git/" }
 
 [extra.ford]
-project = "fumat"
-summary = "Modern Fortran library to plot and analyze the results of constitutive-model element tests"
+project = "csm-analysis"
+summary = "Modern Fortran library to plot and analyze constitutive-model results: plots, data comparison, sensitivity studies, calibration"
 src_dir = ["src", "example"]
 output_dir = "build/doc"
 
