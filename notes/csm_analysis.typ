@@ -1,16 +1,16 @@
 #import "template.typ": *
 #import "tags.typ": *
 #show: note.with(
-  title: "csm-analysis (formerly fumat)",
+  title: "csm-analysis",
   subtitle: [Architecture, decisions, and change log · started 2026-09-30],
 )
 
-This is the single developer document for `csm-analysis` (named `fumat` until 2026-09-30). Compile it from the repository root with
+This is the single developer document for `csm-analysis`. Compile it from the repository root with
 `typst compile --root . notes/csm_analysis.typ`; the chapters live in `notes/architecture.typ` and are not
 compiled on their own. The layout follows `element-driver/notes`, and `template.typ` is a copy of
 the one there.
 
-- @ch-arch covers where `fumat` sits among the CriticalSoilModels repositories, its decisions (F1,
+- @ch-arch covers where `csm-analysis` sits among the CriticalSoilModels repositories, its decisions (F1,
   F2, ...), the proposed module layout, the open questions, and the milestones.
 - @ch-next records the discussion of next steps (data sets, file readers, analysis libraries, the
   calibration problem). It is the context behind open questions Q4--Q6 and Q9--Q12.

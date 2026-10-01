@@ -1,5 +1,5 @@
 # csm-analysis
-(Formerly *fumat*, renamed 2026-09-30.) A modern Fortran library for analyzing, plotting, and general data processing of results from constitutive models: element tests, FEM, MPM. It is also the home for parameter sensitivity studies and calibration as they are added. With the modern fortran ecosystem it's possible to do all of the analysis that would normally be done in python in fortran. 
+A modern Fortran library for analyzing, plotting, and general data processing of results from constitutive models: element tests, FEM, MPM. It is also the home for parameter sensitivity studies and calibration as they are added. With the modern fortran ecosystem it's possible to do all of the analysis that would normally be done in python in fortran. 
 
 There are a couple of benefits to doing the data processing in fortran rather than python.
 1) Fortran is really fast. We can do a lot of testing and plotting quickly.

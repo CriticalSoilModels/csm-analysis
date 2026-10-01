@@ -1,4 +1,4 @@
-# csm-analysis (formerly fumat)
+# csm-analysis
 
 Modern Fortran library to plot and analyze constitutive-model results (element tests, FEM, MPM): plots, data comparison, and later sensitivity studies and calibration. Build and
 test with `fpm build` / `fpm test` in the conda env `fpm` (see README.md).

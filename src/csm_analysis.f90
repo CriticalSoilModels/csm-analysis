@@ -1,4 +1,4 @@
-! csm-analysis (formerly fumat): post-processing and plotting of constitutive-model results.
+! csm-analysis: post-processing and plotting of constitutive-model results.
 ! Re-exports the public API; see notes/csm_analysis.pdf for the design.
 
 module csm_analysis

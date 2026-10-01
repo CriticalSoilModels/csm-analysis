@@ -33,7 +33,7 @@ been checked yet.
 
 = From lab data to `sig(6, n)` and `eps(6, n)` <sec-lab>
 
-Lab files are not in `fumat`'s form (F2, F3, F5). A triaxial test gives $sigma_a$, $sigma_r$ (or $q$,
+Lab files are not in `csm-analysis`'s form (F2, F3, F5). A triaxial test gives $sigma_a$, $sigma_r$ (or $q$,
 $p'$), $epsilon_a$, $epsilon_v$, often pore pressure $u$; compression positive; strains often in %
 and stresses in kPa. `mod_fm_lab` would
 

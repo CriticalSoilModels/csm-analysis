@@ -1,4 +1,4 @@
-// Status tags shared by the chapters of fumat.typ.
+// Status tags shared by the chapters of csm_analysis.typ.
 // Generic tags (resolved, proposed, ...) come from template.typ.
 #import "template.typ": status
 
