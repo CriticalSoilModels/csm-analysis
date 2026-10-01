@@ -257,6 +257,7 @@ The optimizer (e.g. modern-minpack's Levenberg--Marquardt, as planned in
 `Notes/architecture_decisions.md`) sees only `simulator_t`, the measured data, and
 `mod_fm_compare`. An `element-driver` simulator lives in `element-driver` or in the user's program.
 Because `element-driver` has no global state (D11), parameter sets can run in parallel.
+The kind of optimization problem and the candidate optimizers are discussed in @sec-opt.
 
 = Open questions <sec-questions>
 
@@ -266,14 +267,23 @@ Because `element-driver` has no global state (D11), parameter sets can run in pa
   [Q1], [Regular or dev-dependency? Regular (F8).], [#resolved],
   [Q2], [What goes in `record_t`? Not needed now (F11).], [#resolved],
   [Q3], [Shared invariants library? `csm-tensors` (F10).], [#resolved],
-  [Q4], [CSV reader (`stdlib_io: loadtxt` or `csv-fortran`).], [#deferred],
-  [Q5], [Which lab data first.], [#deferred],
+  [Q4], [CSV reader (`stdlib_io: loadtxt` or `csv-fortran`). `loadtxt` is numeric only; mapping
+    columns by name needs `csv-fortran` or a sidecar (@sec-files).], [#deferred],
+  [Q5], [Which lab data first. Karlsruhe fine sand suggested; candidates in @sec-data.], [#open-tag],
   [Q6], [Where the optimizer lives (F4), once `mod_fm_compare` exists.], [#deferred],
   [Q7], [*`fortplot` subplot legend.* Checked 2026-09-30 against `lazy-fortran/fortplot` `af5f26e`:
     `figure_t%legend` draws all entries on top of each other in the lower-left corner of the figure
     and ignores `location`; `suptitle` does not break lines; `figure_t` has no text call. Worked
     around in `quad_plot_t` (@sec-quad). Reporting upstream is still open.], [#open-tag],
   [Q8], [*Invariant or triaxial pair in the quad plot?* Invariant pair (F12, 2026-09-30).], [#resolved],
+  [Q9], [*Metadata sidecar: JSON or TOML?* Units, sign convention, column map, initial state
+    (@sec-files).], [#open-tag],
+  [Q10], [*Which model is calibrated first?* Its parameters decide which tests matter (@sec-order).],
+    [#open-tag],
+  [Q11], [*Undrained tests (pore pressure) in scope from the start?* Affects `mod_fm_lab` and the
+    residuals (@sec-lab).], [#open-tag],
+  [Q12], [*Optimization strategy and libraries.* LM (minpack), BOBYQA (PRIMA), global search
+    (differential evolution, `pikaia`); residual abscissa and normalization (@sec-opt).], [#open-tag],
 )
 
 = Current state (review of 2026-09-30) <sec-state>
@@ -312,7 +322,8 @@ Because `element-driver` has no global state (D11), parameter sets can run in pa
     uses `fortplot` directly. Still open: report the legend bug upstream (Q7).],
   [3], [*Comparison.* `mod_fm_compare`: interpolation and residuals, tested with one
     `element-driver` run as synthetic "data". Then decide Q6 and the `simulator_t` interface.],
-  [--], [*Deferred.* Text files: CSV, legacy output, lab data, `record_t` readers (F9).],
+  [--], [*Deferred.* Text files: CSV, legacy output, lab data, `record_t` readers (F9). Proposed
+    order for this and milestone 3 in @sec-order: data set, readers, comparison, optimizer.],
 )
 
 = Change log <sec-log>
@@ -329,3 +340,6 @@ Because `element-driver` has no global state (D11), parameter sets can run in pa
   triaxial pair (F12, Q8).
 - 2026-09-30: Milestones 1 and 2 done: `oedometer_plot_t`, `xy_plot_t`, shared `mod_fm_plot_style`;
   README and `environment.yml`; F6, F7 in effect. 11 tests pass.
+- 2026-09-30: Next steps discussed (@ch-next): candidate data sets, lab data to Voigt arrays, CSV
+  plus metadata sidecar, reader and analysis libraries, the calibration problem, a proposed order.
+  Q4 and Q5 updated; Q9--Q12 added. Nothing decided.

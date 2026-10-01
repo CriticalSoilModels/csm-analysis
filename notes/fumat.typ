@@ -12,6 +12,8 @@ the one there.
 
 - @ch-arch covers where `fumat` sits among the CriticalSoilModels repositories, its decisions (F1,
   F2, ...), the proposed module layout, the open questions, and the milestones.
+- @ch-next records the discussion of next steps (data sets, file readers, analysis libraries, the
+  calibration problem). It is the context behind open questions Q4--Q6 and Q9--Q12.
 
 Decisions of `element-driver` are cited as D1, D2, ... (see `element-driver/notes/design.typ`).
 
@@ -29,4 +31,11 @@ Decisions of `element-driver` are cited as D1, D2, ... (see `element-driver/note
 #[
   #set heading(offset: 1)
   #include "architecture.typ"
+]
+
+#pagebreak()
+= Next steps: data, readers, calibration <ch-next>
+#[
+  #set heading(offset: 1)
+  #include "next_steps.typ"
 ]

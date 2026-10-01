@@ -9,3 +9,11 @@ output/
 
 # Local Claude Code settings and hooks
 .claude/
+
+# Editor settings
+.vscode/
+
+# Outputs of app/main.f90
+text.png
+text.pdf
+test_100.png
